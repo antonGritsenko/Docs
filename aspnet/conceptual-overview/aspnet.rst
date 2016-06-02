@@ -111,7 +111,7 @@ The content root is the base path to any content used by the app, such as its vi
 Web root
 --------
 
-The web root of your app is the root location in your project from which HTTP requests are handled (for example handling of static file requests). The web root of an ASP.NET Core app is configured using the ``webroot`` property in the *project.json* file. When using the static files middleware only files from the web root folder are accessible; the other files in the content root **cannot** be accessed remotely. The default web root path is `<content root>/wwwroot`, but you can specify a different location using the `WebHostBuilder`.
+The web root of your app is the root location in your project from which HTTP requests are handled (for example handling of static file requests). When using the static files middleware only files from the web root folder are accessible; the other files in the content root **cannot** be accessed remotely. The default web root path is `<content root>/wwwroot`, but you can specify a different location using the `WebHostBuilder`.
 
 Configuration
 -------------
