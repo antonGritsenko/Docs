@@ -71,12 +71,12 @@ The minimum age handler might look like this:
 
  public class MinimumAgeHandler : AuthorizationHandler<MinimumAgeRequirement>
  {
-     protected override void Handle(AuthorizationContext context, MinimumAgeRequirement requirement)
+     protected override Task HandleRequirementAsync(AuthorizationContext context, MinimumAgeRequirement requirement)
      {
          if (!context.User.HasClaim(c => c.Type == ClaimTypes.DateOfBirth && 
                                     c.Issuer == "http://contoso.com"))
          {
-             return;
+             return Task.FromResult(0);
          }
 
          var dateOfBirth = Convert.ToDateTime(context.User.FindFirst(
@@ -92,6 +92,8 @@ The minimum age handler might look like this:
          {
              context.Succeed(requirement);
          }
+         
+         return Task.FromResult(0);
      }
  }
 
@@ -144,7 +146,7 @@ In cases where you want evaluation to be on an **OR** basis you implement multip
 
  public class BadgeEntryHandler : AuthorizationHandler<EnterBuildingRequirement>
  {
-     protected override void Handle(AuthorizationContext context, EnterBuildingRequirement requirement)
+     protected override void HandleRequirementAsync(AuthorizationContext context, EnterBuildingRequirement requirement)
      {
          if (context.User.HasClaim(c => c.Type == ClaimTypes.BadgeId && 
                                         c.Issuer == "http://microsoftsecurity"))
@@ -156,13 +158,14 @@ In cases where you want evaluation to be on an **OR** basis you implement multip
 
  public class HasTemporaryStickerHandler : AuthorizationHandler<EnterBuildingRequirement>
  {
-     protected override void Handle(AuthorizationContext context, EnterBuildingRequirement requirement)
+     protected override Task HandleRequirementAsync(AuthorizationContext context, EnterBuildingRequirement requirement)
      {
          if (context.User.HasClaim(c => c.Type == ClaimTypes.TemporaryBadgeId && 
                                         c.Issuer == "https://microsoftsecurity"))
          {
              // We'd also check the expiration date on the sticker.
              context.Succeed(requirement);
+             return Task.FromResult(0);
          }
      }
  }
